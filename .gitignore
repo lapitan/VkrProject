@@ -1,0 +1,13 @@
+LessonsApi/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+LessonsApi/.idea/modules.xml
+LessonsApi/.idea/jarRepositories.xml
+LessonsApi/.idea/compiler.xml
+LessonsApi/.idea/libraries/
+LessonsApi/*.iws
+LessonsApi/*.iml
+LessonsApi/*.ipr

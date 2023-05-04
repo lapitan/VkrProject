@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: LessonsApiDb
+    environment:
+      POSTGRES_DB: "LessonsApiDb"
+      POSTGRES_USER: "vkr123"
+      POSTGRES_PASSWORD: "vkr123"
+    ports:
+      - "6543:5432"
+  postgres2:
+    image: postgres:latest
+    container_name: DiscordBotDb
+    environment:
+      POSTGRES_DB: "DiscordBotDb"
+      POSTGRES_USER: "vkr123"
+      POSTGRES_PASSWORD: "vkr123"
+    ports:
+      - "7653:5432"
+  rabbitmq:
+    container_name: vkrRabbitMqServer
+    image: rabbitmq:latest
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=vkr
+      - RABBITMQ_DEFAULT_PASS=vkr
+    ports:
+      - 15672:15672
