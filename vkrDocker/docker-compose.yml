@@ -20,11 +20,9 @@ services:
       - "7653:5432"
   rabbitmq:
     container_name: vkrRabbitMqServer
-    image: rabbitmq:latest
+    image: rabbitmq:3.11-management
     hostname: rabbitmq
     restart: always
-    environment:
-      - RABBITMQ_DEFAULT_USER=vkr
-      - RABBITMQ_DEFAULT_PASS=vkr
     ports:
       - 15672:15672
+      - 5672:5672

@@ -1,5 +1,8 @@
 package lapitan.vkr.ApiService.exceptionHandler;
 
+import lapitan.vkr.ApiService.exception.IllegalException;
+import lapitan.vkr.ApiService.security.exception.JwtAuthenticationException;
+import lapitan.vkr.ApiService.subject.exception.NoSuchSubjectException;
 import lapitan.vkr.ApiService.user.exception.NoSuchUserException;
 import lapitan.vkr.ApiService.user.exception.NotUniqueUsernameException;
 import lombok.NonNull;
@@ -25,6 +28,27 @@ public class ControllerExceptionHandler {
     public ResponseEntity<BaseWebResponse> handleNoSuchUserException(@NonNull final NoSuchUserException exc) {
         log.error(exc.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new BaseWebResponse(createErrorMessage(exc)));
+    }
+
+    @ExceptionHandler(NoSuchSubjectException.class)
+    public ResponseEntity<BaseWebResponse> handleNoSuchSubjectException(@NonNull final NoSuchSubjectException exc) {
+        log.error(exc.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new BaseWebResponse(createErrorMessage(exc)));
+    }
+
+    @ExceptionHandler(JwtAuthenticationException.class)
+    public ResponseEntity<BaseWebResponse> handleJwtAuthenticationException(@NonNull final JwtAuthenticationException exc) {
+        log.error(exc.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new BaseWebResponse(createErrorMessage(exc)));
+    }
+
+    @ExceptionHandler(IllegalException.class)
+    public ResponseEntity<BaseWebResponse> handleIllegalException(@NonNull final IllegalException exc) {
+        log.error(exc.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new BaseWebResponse(createErrorMessage(exc)));
     }
 

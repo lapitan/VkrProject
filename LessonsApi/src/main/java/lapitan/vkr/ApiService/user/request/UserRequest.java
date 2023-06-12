@@ -17,6 +17,6 @@ public class UserRequest {
 
     private boolean confirmed;
 
-    private String status;
+    private String role;
 
 }

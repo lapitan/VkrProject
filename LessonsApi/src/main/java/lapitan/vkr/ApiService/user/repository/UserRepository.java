@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.LockModeType;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,5 +19,10 @@ public interface UserRepository extends CrudRepository<Person, Long> {
     @Query("select p from Person p where p.username =:username")
     Optional<Person> findUserByUsername(
             @Param("username") String username);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Person p where p.groupp =:groupp")
+    List<Person> findAllUsersWithGroup(
+            @Param("groupp") String groupp);
 
 }

@@ -10,6 +10,8 @@ import lapitan.vkr.ApiService.user.request.UserRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class UserService {
@@ -23,45 +25,54 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto createUser(UserRequest userRequest) {
+    public Person createUser(Person user) {
 
-        userRepository.findUserByUsername(userRequest.getUsername()).orElseThrow(() ->
-                new NotUniqueUsernameException("cant create user: username " + userRequest.getUsername() + " is already used"));
+        if (checkUserByUsername(user.getUsername())) {
+            throw new NotUniqueUsernameException("there is another one user with name: " + user.getUsername());
+        }
 
-        return userMapper.userToUserDto(userRepository.save(userMapper.userRequestToUser(userRequest)));
+        return userRepository.save(user);
     }
 
     @Transactional
-    public UserDto updateUser(Long id, UserRequest userRequest) {
+    public Person updateUser(Long id, Person user) {
 
-        Person person = userRepository.findById(id).orElseThrow(() ->
+        Person personInDb = userRepository.findById(id).orElseThrow(() ->
                 new NoSuchUserException("update user: can't find user to update with id: " + id));
-        Person savedPerson = userMapper.userRequestToUser(userRequest);
-        savedPerson.setId(id);
-        savedPerson.setUsername(person.getUsername());
+        user.setId(id);
+        user.setUsername(personInDb.getUsername());
 
-        return userMapper.userToUserDto(userRepository.save(savedPerson));
+        return userRepository.save(user);
     }
 
     @Transactional
-    public UserDto getUserById(Long id) {
-        return userMapper.userToUserDto(userRepository.findById(id).orElseThrow(() ->
-                new NoSuchUserException("Can't get user: No such user with id: " + id)));
+    public Person getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new NoSuchUserException("Can't get user: No such user with id: " + id));
     }
 
     @Transactional
-    public void deleteUser(Long id){
+    public void deleteUser(Long id) {
         userRepository.findById(id).orElseThrow(() ->
                 new NoSuchUserException("Can't delete user: No such user with id: " + id));
         userRepository.deleteById(id);
     }
 
     @Transactional
-    public UserDto getUserByUsername(String username){
-        return userMapper.userToUserDto(userRepository.findUserByUsername(username).orElseThrow(()->
-                new NoSuchUserException("Can't get user: No such user with username: "+username)));
+    public Person getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username).orElseThrow(() ->
+                new NoSuchUserException("Can't get user: No such user with username: " + username));
     }
 
+    @Transactional
+    public List<Person> getPersonWithGroupp(String groupp){
+        return userRepository.findAllUsersWithGroup(groupp);
+    }
+
+    @Transactional
+    public void saveUser(Person person){
+        userRepository.save(person);
+    }
 
     private boolean checkUserById(Long id) {
         return userRepository.findById(id).isPresent();
